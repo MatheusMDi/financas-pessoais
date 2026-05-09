@@ -3,7 +3,7 @@ import { Header } from '../components/layout/Header'
 import { DividasList } from '../components/dividas/DividasList'
 
 export function DividasPage() {
-  const { dividas, totalComprometido, adicionarDivida, removerDivida } = useDividas()
+  const { dividas, totalComprometido, adicionarDivida, removerDivida, atualizarDivida } = useDividas()
 
   return (
     <div className="flex flex-col flex-1">
@@ -13,6 +13,7 @@ export function DividasPage() {
         totalComprometido={totalComprometido}
         onAdicionar={adicionarDivida}
         onRemover={removerDivida}
+        onAtualizar={atualizarDivida}
       />
     </div>
   )

@@ -1,9 +1,9 @@
 import { db } from '../db/database'
-import type { Divida, StatusDivida, OrigemFinanceira } from '../db/types'
+import type { Divida, StatusDivida, OrigemFinanceira, GastoVariavel, Categoria, Subcategoria, Conta } from '../db/types'
 
 export async function exportBackup(): Promise<void> {
   const data = {
-    version: 1,
+    version: 2,
     exportedAt: new Date().toISOString(),
     dividas: await db.dividas.toArray(),
     cartoes: await db.cartoes.toArray(),
@@ -12,6 +12,10 @@ export async function exportBackup(): Promise<void> {
     metas: await db.metas.toArray(),
     rendaMensal: await db.rendaMensal.toArray(),
     configuracoes: await db.configuracoes.toArray(),
+    gastosVariaveis: await db.gastosVariaveis.toArray(),
+    categorias: await db.categorias.toArray(),
+    subcategorias: await db.subcategorias.toArray(),
+    contas: await db.contas.toArray(),
   }
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
@@ -32,6 +36,10 @@ export interface BackupData {
   metas: unknown[]
   rendaMensal: unknown[]
   configuracoes?: unknown[]
+  gastosVariaveis?: GastoVariavel[]
+  categorias?: Categoria[]
+  subcategorias?: Subcategoria[]
+  contas?: Conta[]
 }
 
 export interface BackupSummary {
@@ -41,6 +49,7 @@ export interface BackupSummary {
   gastosFuturos: number
   metas: number
   rendaMensal: number
+  gastosVariaveis?: number
 }
 
 export function validateBackup(raw: unknown): { valid: true; data: BackupData; summary: BackupSummary } | { valid: false; error: string } {
@@ -68,36 +77,55 @@ export function validateBackup(raw: unknown): { valid: true; data: BackupData; s
       gastosFuturos: (data.gastosFuturos as unknown[]).length,
       metas: (data.metas as unknown[]).length,
       rendaMensal: (data.rendaMensal as unknown[]).length,
+      gastosVariaveis: data.gastosVariaveis?.length,
     },
   }
 }
 
 export async function importBackup(data: BackupData): Promise<void> {
-  await db.transaction('rw',
-    [db.dividas, db.cartoes, db.impostos, db.gastosFuturos, db.metas, db.rendaMensal, db.configuracoes],
-    async () => {
-      await db.dividas.clear()
-      await db.cartoes.clear()
-      await db.impostos.clear()
-      await db.gastosFuturos.clear()
-      await db.metas.clear()
-      await db.rendaMensal.clear()
-      if (data.configuracoes) await db.configuracoes.clear()
+  const tables = [
+    db.dividas, db.cartoes, db.impostos, db.gastosFuturos,
+    db.metas, db.rendaMensal, db.configuracoes,
+    db.gastosVariaveis, db.categorias, db.subcategorias, db.contas,
+  ]
+  await db.transaction('rw', tables, async () => {
+    await db.dividas.clear()
+    await db.cartoes.clear()
+    await db.impostos.clear()
+    await db.gastosFuturos.clear()
+    await db.metas.clear()
+    await db.rendaMensal.clear()
+    if (data.configuracoes) await db.configuracoes.clear()
+    if (data.gastosVariaveis) await db.gastosVariaveis.clear()
 
-      const stripId = <T extends { id?: number }>(items: T[]): Omit<T, 'id'>[] =>
-        items.map(({ id: _id, ...rest }) => rest as Omit<T, 'id'>)
+    const stripId = <T extends { id?: number }>(items: T[]): Omit<T, 'id'>[] =>
+      items.map(({ id: _id, ...rest }) => rest as Omit<T, 'id'>)
 
-      if (data.dividas.length > 0) await db.dividas.bulkAdd(stripId(data.dividas) as Divida[])
-      if ((data.cartoes as unknown[]).length > 0) await db.cartoes.bulkAdd(stripId(data.cartoes as { id?: number }[]) as never[])
-      if ((data.impostos as unknown[]).length > 0) await db.impostos.bulkAdd(stripId(data.impostos as { id?: number }[]) as never[])
-      if ((data.gastosFuturos as unknown[]).length > 0) await db.gastosFuturos.bulkAdd(stripId(data.gastosFuturos as { id?: number }[]) as never[])
-      if ((data.metas as unknown[]).length > 0) await db.metas.bulkAdd(stripId(data.metas as { id?: number }[]) as never[])
-      if ((data.rendaMensal as unknown[]).length > 0) await db.rendaMensal.bulkAdd(stripId(data.rendaMensal as { id?: number }[]) as never[])
-      if (data.configuracoes && (data.configuracoes as unknown[]).length > 0) {
-        await db.configuracoes.bulkAdd(stripId(data.configuracoes as { id?: number }[]) as never[])
-      }
+    if (data.dividas.length > 0) await db.dividas.bulkAdd(stripId(data.dividas) as Divida[])
+    if ((data.cartoes as unknown[]).length > 0) await db.cartoes.bulkAdd(stripId(data.cartoes as { id?: number }[]) as never[])
+    if ((data.impostos as unknown[]).length > 0) await db.impostos.bulkAdd(stripId(data.impostos as { id?: number }[]) as never[])
+    if ((data.gastosFuturos as unknown[]).length > 0) await db.gastosFuturos.bulkAdd(stripId(data.gastosFuturos as { id?: number }[]) as never[])
+    if ((data.metas as unknown[]).length > 0) await db.metas.bulkAdd(stripId(data.metas as { id?: number }[]) as never[])
+    if ((data.rendaMensal as unknown[]).length > 0) await db.rendaMensal.bulkAdd(stripId(data.rendaMensal as { id?: number }[]) as never[])
+    if (data.configuracoes && (data.configuracoes as unknown[]).length > 0) {
+      await db.configuracoes.bulkAdd(stripId(data.configuracoes as { id?: number }[]) as never[])
     }
-  )
+    if (data.gastosVariaveis && data.gastosVariaveis.length > 0) {
+      await db.gastosVariaveis.bulkAdd(stripId(data.gastosVariaveis) as GastoVariavel[])
+    }
+    if (data.categorias && data.categorias.length > 0) {
+      await db.categorias.clear()
+      await db.categorias.bulkAdd(stripId(data.categorias) as Categoria[])
+    }
+    if (data.subcategorias && data.subcategorias.length > 0) {
+      await db.subcategorias.clear()
+      await db.subcategorias.bulkAdd(stripId(data.subcategorias) as Subcategoria[])
+    }
+    if (data.contas && data.contas.length > 0) {
+      await db.contas.clear()
+      await db.contas.bulkAdd(stripId(data.contas) as Conta[])
+    }
+  })
 }
 
 const STATUS_DIVIDA_VALID: StatusDivida[] = ['em_aberto', 'atencao', 'quitado']

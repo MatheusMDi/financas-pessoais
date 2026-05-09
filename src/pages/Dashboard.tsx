@@ -1,27 +1,24 @@
-import { useLiveQuery } from 'dexie-react-hooks'
-import { db } from '../db/database'
 import { useFluxo } from '../hooks/useFluxo'
 import { useRendaMensal } from '../hooks/useRendaMensal'
 import { useDividas } from '../hooks/useDividas'
 import { useCartoes } from '../hooks/useCartoes'
 import { useImpostos } from '../hooks/useImpostos'
+import { useSaldoDia } from '../hooks/useSaldoDia'
 import { Header } from '../components/layout/Header'
 import { SaldoHero } from '../components/dashboard/SaldoHero'
 import { MetricCards } from '../components/dashboard/MetricCards'
 import { GraficoMargem } from '../components/dashboard/GraficoMargem'
+import { GraficoSemanal } from '../components/dashboard/GraficoSemanal'
+import { ReservaEmergenciaCard } from '../components/dashboard/ReservaEmergenciaCard'
 import { FluxoItem } from '../components/fluxo/FluxoItem'
 
 export function Dashboard() {
-  const { eventos, saldoAtual } = useFluxo(3)
+  const { eventos } = useFluxo(3)
   const { rendaMensal, rendaAtual } = useRendaMensal()
   const { totalComprometido } = useDividas()
   const { totalFaturas } = useCartoes()
   const { totalAPagar } = useImpostos()
-
-  const configuracoes = useLiveQuery(() => db.configuracoes.toArray(), []) ?? []
-
-  const saldoConfig = configuracoes.find((c: { chave: string }) => c.chave === 'saldoAtual')
-  const saldoDisplay = saldoConfig ? parseFloat(saldoConfig.valor) || 0 : saldoAtual
+  const saldoDia = useSaldoDia()
 
   const totalSaidas = totalComprometido + totalFaturas + totalAPagar
   const rendaTotal = rendaAtual?.totalLiquido ?? 0
@@ -34,10 +31,11 @@ export function Dashboard() {
     <div className="flex flex-col flex-1 pb-20">
       <Header titulo="MD Finanças" />
       <SaldoHero
-        saldoAtual={saldoDisplay}
+        saldoDia={saldoDia}
         totalComprometido={totalSaidas}
         percentualComprometido={percentualComprometido}
       />
+      <ReservaEmergenciaCard />
       <MetricCards
         rendaTotal={rendaTotal}
         totalSaidas={totalSaidas}
@@ -46,6 +44,10 @@ export function Dashboard() {
 
       <div className="mt-4">
         <GraficoMargem dados={rendaMensal} />
+      </div>
+
+      <div className="mt-4">
+        <GraficoSemanal />
       </div>
 
       {proximosEventos.length > 0 && (

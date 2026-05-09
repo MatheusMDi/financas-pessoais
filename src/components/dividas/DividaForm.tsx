@@ -24,6 +24,12 @@ const STATUS: { value: StatusDivida; label: string }[] = [
   { value: 'quitado', label: 'Quitado' },
 ]
 
+const RECORRENCIAS = [
+  { value: 'nenhuma', label: 'Nenhuma (lançar manualmente)' },
+  { value: 'fixa', label: 'Fixa (valor igual todo mês)' },
+  { value: 'variavel', label: 'Variável (valor muda todo mês)' },
+]
+
 export function DividaForm({ onSalvar, onFechar, inicial }: DividaFormProps) {
   const [nome, setNome] = useState(inicial?.nome ?? '')
   const [tipo, setTipo] = useState<TipoDivida>(inicial?.tipo ?? 'parcela_fixa')
@@ -34,9 +40,15 @@ export function DividaForm({ onSalvar, onFechar, inicial }: DividaFormProps) {
   const [parcelasPagas, setParcelasPagas] = useState(String(inicial?.parcelasPagas ?? '0'))
   const [vencimentoDia, setVencimentoDia] = useState(String(inicial?.vencimentoDia ?? ''))
   const [status, setStatus] = useState<StatusDivida>(inicial?.status ?? 'em_aberto')
+  const [recorrencia, setRecorrencia] = useState<'nenhuma' | 'fixa' | 'variavel'>(inicial?.recorrencia ?? 'nenhuma')
   const [observacoes, setObservacoes] = useState(inicial?.observacoes ?? '')
   const [salvando, setSalvando] = useState(false)
   const [erros, setErros] = useState<Record<string, string>>({})
+
+  const parcelasTotaisNum = parseInt(parcelasTotais) || 0
+  const parcelasPagasNum = parseInt(parcelasPagas) || 0
+  const valorParcelaNum = parseFloat(valorParcela) || 0
+  const restantes = Math.max(0, parcelasTotaisNum - parcelasPagasNum)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -71,6 +83,7 @@ export function DividaForm({ onSalvar, onFechar, inicial }: DividaFormProps) {
         parcelasPagas: pp,
         vencimentoDia: parseInt(vencimentoDia),
         status,
+        recorrencia,
         observacoes: observacoes.trim() || undefined,
         criadoEm: new Date().toISOString(),
       })
@@ -151,6 +164,24 @@ export function DividaForm({ onSalvar, onFechar, inicial }: DividaFormProps) {
               placeholder="10"
             />
           </div>
+
+          <FormSelect
+            label="Recorrência"
+            value={recorrencia}
+            onChange={e => setRecorrencia(e.target.value as typeof recorrencia)}
+            options={RECORRENCIAS}
+          />
+
+          {recorrencia !== 'nenhuma' && restantes > 0 && valorParcelaNum > 0 && (
+            <div className="bg-[rgba(77,159,255,0.08)] border border-[rgba(77,159,255,0.2)] rounded-xl px-3 py-2.5">
+              <p className="text-xs text-[var(--blue)] leading-relaxed">
+                {recorrencia === 'fixa'
+                  ? `Parcela de R$ ${valorParcelaNum.toFixed(2).replace('.', ',')} será lançada automaticamente todo mês. Total restante: ${restantes}x`
+                  : `Você será lembrado de registrar o valor desta parcela todo mês. ${restantes} parcelas restantes.`}
+              </p>
+            </div>
+          )}
+
           <FormSelect
             label="Status"
             value={status}

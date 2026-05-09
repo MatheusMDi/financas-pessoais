@@ -9,6 +9,7 @@ export type PrioridadeGasto = 'urgente' | 'importante' | 'desejo'
 export type StatusGasto = 'planejado' | 'juntando' | 'comprado' | 'cancelado'
 export type TipoMeta = 'reserva_emergencia' | 'compra_planejada' | 'quitar_divida' | 'investimento' | 'outro'
 export type StatusMeta = 'em_andamento' | 'concluida' | 'pausada' | 'cancelada'
+export type TipoLancamento = 'gasto' | 'receita_extra'
 
 export interface Divida {
   id?: number
@@ -21,6 +22,7 @@ export interface Divida {
   parcelasPagas: number
   vencimentoDia: number
   status: StatusDivida
+  recorrencia?: 'nenhuma' | 'fixa' | 'variavel'
   observacoes?: string
   criadoEm: string
 }
@@ -93,4 +95,58 @@ export interface Configuracao {
   id?: number
   chave: string
   valor: string
+}
+
+export interface GastoVariavel {
+  id?: number
+  descricao?: string
+  valor: number
+  categoriaId: number
+  subcategoriaId?: number
+  contaId: number
+  data: string
+  tipo: TipoLancamento
+  observacoes?: string
+  criadoEm: string
+}
+
+export interface Categoria {
+  id?: number
+  nome: string
+  icone: string
+  cor: string
+  tipo: 'gasto' | 'receita' | 'ambos'
+  orcamentoMensal?: number
+  ordem: number
+  padrao: boolean
+}
+
+export interface Subcategoria {
+  id?: number
+  categoriaId: number
+  nome: string
+  icone?: string
+  ordem: number
+}
+
+export interface Conta {
+  id?: number
+  nome: string
+  tipo: 'corrente' | 'poupanca' | 'investimento' | 'carteira' | 'outro'
+  banco?: string
+  saldoInicial: number
+  cor: string
+  icone: string
+  ativa: boolean
+}
+
+export interface FaturaCartao {
+  id?: number
+  cartaoId: number
+  mesAno: string
+  valorFatura: number
+  diaVencimento: number
+  status: 'aberta' | 'paga' | 'atrasada'
+  paga: boolean
+  dataPagamento?: string
 }

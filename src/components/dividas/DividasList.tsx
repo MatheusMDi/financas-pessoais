@@ -10,13 +10,26 @@ interface DividasListProps {
   totalComprometido: number
   onAdicionar: (divida: Omit<Divida, 'id'>) => Promise<void>
   onRemover: (id: number) => Promise<void>
+  onAtualizar: (id: number, changes: Partial<Divida>) => Promise<void>
 }
 
-export function DividasList({ dividas, totalComprometido, onAdicionar, onRemover }: DividasListProps) {
+export function DividasList({ dividas, totalComprometido, onAdicionar, onRemover, onAtualizar }: DividasListProps) {
   const [mostraForm, setMostraForm] = useState(false)
 
   const ativas = dividas.filter(d => d.status !== 'quitado')
   const quitadas = dividas.filter(d => d.status === 'quitado')
+
+  async function handleMarcarPago(divida: Divida, novoValorParcela?: number) {
+    if (divida.id === undefined) return
+    const novasPagas = divida.parcelasPagas + 1
+    const vp = novoValorParcela ?? divida.valorParcela
+    const quitado = novasPagas >= divida.parcelasTotais
+    await onAtualizar(divida.id, {
+      parcelasPagas: novasPagas,
+      valorParcela: vp,
+      status: quitado ? 'quitado' : divida.status,
+    })
+  }
 
   return (
     <div className="flex-1 px-4 pb-24">
@@ -32,6 +45,7 @@ export function DividasList({ dividas, totalComprometido, onAdicionar, onRemover
               key={d.id}
               divida={d}
               onRemover={() => d.id !== undefined && void onRemover(d.id)}
+              onMarcarPago={(novoValor) => handleMarcarPago(d, novoValor)}
             />
           ))}
           {quitadas.length > 0 && (
