@@ -327,6 +327,7 @@ export function ConfigPage() {
         {/* NAVEGAÇÃO EXTRA */}
         <div className="bg-[var(--bg3)] border border-[var(--border)] rounded-xl overflow-hidden">
           {[
+            { href: '/relatorios', label: '📊 Relatórios' },
             { href: '/impostos', label: '🧾 Impostos' },
             { href: '/metas', label: '🎯 Metas' },
             { href: '/cartoes', label: '💳 Cartões' },

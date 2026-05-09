@@ -12,6 +12,7 @@ import { MetasPage } from './pages/MetasPage'
 import { SimuladorPage } from './pages/SimuladorPage'
 import { ConfigPage } from './pages/ConfigPage'
 import { RelatoriosPage } from './pages/RelatoriosPage'
+import { ProjecaoPage } from './pages/ProjecaoPage'
 import { useThemeStore } from './store/themeStore'
 
 export function App() {
@@ -28,6 +29,7 @@ export function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/fluxo" element={<FluxoPage />} />
           <Route path="/relatorios" element={<RelatoriosPage />} />
+          <Route path="/projecao" element={<ProjecaoPage />} />
           <Route path="/dividas" element={<DividasPage />} />
           <Route path="/cartoes" element={<CartoesPage />} />
           <Route path="/impostos" element={<ImpostosPage />} />

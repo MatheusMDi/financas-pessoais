@@ -10,6 +10,7 @@ import { MetricCards } from '../components/dashboard/MetricCards'
 import { GraficoMargem } from '../components/dashboard/GraficoMargem'
 import { GraficoSemanal } from '../components/dashboard/GraficoSemanal'
 import { ReservaEmergenciaCard } from '../components/dashboard/ReservaEmergenciaCard'
+import { ProjecaoMiniCard } from '../components/dashboard/ProjecaoMiniCard'
 import { FluxoItem } from '../components/fluxo/FluxoItem'
 
 export function Dashboard() {
@@ -36,6 +37,11 @@ export function Dashboard() {
         percentualComprometido={percentualComprometido}
       />
       <ReservaEmergenciaCard />
+
+      <div className="mt-3">
+        <ProjecaoMiniCard />
+      </div>
+
       <MetricCards
         rendaTotal={rendaTotal}
         totalSaidas={totalSaidas}

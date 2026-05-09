@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, BarChart2, CreditCard, Settings, Plus } from 'lucide-react'
+import { LayoutDashboard, TrendingUp, CreditCard, Settings, Plus } from 'lucide-react'
 import { BottomSheetLancamento } from '../lancamento/BottomSheetLancamento'
 
 export function BottomNav() {
@@ -22,21 +22,21 @@ export function BottomNav() {
           </NavLink>
 
           <NavLink
-            to="/relatorios"
+            to="/projecao"
             className={({ isActive }) =>
               `flex-1 flex flex-col items-center justify-center gap-1 py-3 min-h-[56px] transition-colors ${isActive ? 'text-[var(--blue)]' : 'text-[var(--text3)]'}`
             }
           >
-            <BarChart2 size={20} strokeWidth={1.75} />
-            <span className="text-[10px] font-medium">Relatórios</span>
+            <TrendingUp size={20} strokeWidth={1.75} />
+            <span className="text-[10px] font-medium">Projeção</span>
           </NavLink>
 
-          {/* Center FAB */}
+          {/* FAB central */}
           <div className="flex-1 flex items-center justify-center">
             <button
               onClick={() => setLancamentoAberto(true)}
               className="w-12 h-12 rounded-full bg-[var(--green)] text-[#0a0a0f] flex items-center justify-center shadow-lg shadow-black/30 -mt-4 active:scale-95 transition-transform"
-              aria-label="Lançar"
+              aria-label="Registrar lançamento"
             >
               <Plus size={24} strokeWidth={2.5} />
             </button>
