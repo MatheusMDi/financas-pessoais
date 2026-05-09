@@ -44,6 +44,21 @@ class MDFinancasDB extends Dexie {
       contas:          '++id, nome, tipo',
       faturas:         '++id, cartaoId, mesAno, status',
     })
+    // v3: adiciona índice "ordem" em categorias e corrige gastosVariaveis.data
+    this.version(3).stores({
+      dividas:         '++id, status, origem, vencimentoDia',
+      cartoes:         '++id, banco, status',
+      impostos:        '++id, tipo, status, vencimento',
+      gastosFuturos:   '++id, categoria, status, prioridade',
+      metas:           '++id, tipo, status',
+      rendaMensal:     '++id, mesAno',
+      configuracoes:   '++id, chave',
+      gastosVariaveis: '++id, categoriaId, subcategoriaId, contaId, data',
+      categorias:      '++id, nome, tipo, ordem',
+      subcategorias:   '++id, categoriaId, nome',
+      contas:          '++id, nome, tipo',
+      faturas:         '++id, cartaoId, mesAno, status',
+    })
   }
 }
 
