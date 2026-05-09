@@ -5,7 +5,7 @@ import { App } from './App'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
 import { seedInitialData, seedCategorias, seedContas } from './db/seed'
 import { db } from './db/database'
-import { deduplicateCategories } from './utils/deduplicateCategories'
+import { deduplicateCategories, deduplicateContas } from './utils/deduplicateCategories'
 
 const DB_NAME = 'md-financas'
 
@@ -44,6 +44,7 @@ async function init() {
       await seedContas()
     }
     await deduplicateCategories()
+    await deduplicateContas()
   } catch (err) {
     console.error('[MDFin] Erro no seed:', err)
   }
