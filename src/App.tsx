@@ -13,6 +13,7 @@ import { SimuladorPage } from './pages/SimuladorPage'
 import { ConfigPage } from './pages/ConfigPage'
 import { RelatoriosPage } from './pages/RelatoriosPage'
 import { ProjecaoPage } from './pages/ProjecaoPage'
+import { DashboardsPage } from './pages/DashboardsPage'
 import { useThemeStore } from './store/themeStore'
 
 export function App() {
@@ -27,6 +28,7 @@ export function App() {
       <Shell>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboards" element={<DashboardsPage />} />
           <Route path="/fluxo" element={<FluxoPage />} />
           <Route path="/relatorios" element={<RelatoriosPage />} />
           <Route path="/projecao" element={<ProjecaoPage />} />

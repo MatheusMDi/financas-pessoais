@@ -2,10 +2,10 @@ import { useState, useRef } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import {
   Moon, Sun, Upload, Info, User, Wallet, CreditCard as CardIcon,
-  Tag, BarChart2, Database, Trash2, Plus, ChevronDown, ChevronRight, Check
+  Tag, BarChart2, Database, Trash2, Plus, ChevronDown, ChevronRight, Check, Palette
 } from 'lucide-react'
 import { db } from '../db/database'
-import { useThemeStore } from '../store/themeStore'
+import { useThemeStore, ACCENT_CORES, type AccentKey } from '../store/themeStore'
 import { useCategorias } from '../hooks/useCategorias'
 import { useContas } from '../hooks/useContas'
 import { useToastStore } from '../store/toastStore'
@@ -27,7 +27,7 @@ async function salvarConfig(chave: string, valor: string) {
 }
 
 export function ConfigPage() {
-  const { tema, toggleTema } = useThemeStore()
+  const { tema, accent, toggleTema, setAccent } = useThemeStore()
   const { categorias, atualizarCategoria, removerCategoria } = useCategorias()
   const { contas, arquivarConta } = useContas()
   const { mostrar } = useToastStore()
@@ -66,9 +66,11 @@ export function ConfigPage() {
 
   async function handleLimparDados() {
     if (confirmDelete !== 'CONFIRMAR') return
+
+    // Apagar dados operacionais
     await db.transaction('rw', [
       db.gastosVariaveis, db.dividas, db.cartoes, db.impostos,
-      db.gastosFuturos, db.metas, db.rendaMensal
+      db.gastosFuturos, db.metas, db.rendaMensal, db.configuracoes,
     ], async () => {
       await db.gastosVariaveis.clear()
       await db.dividas.clear()
@@ -77,8 +79,17 @@ export function ConfigPage() {
       await db.gastosFuturos.clear()
       await db.metas.clear()
       await db.rendaMensal.clear()
+      // Apagar apenas chaves operacionais, preservando tema e corSecundaria
+      const operacionais = [
+        'saldoAtual', 'nomeUsuario', 'rendaMensal', 'diaRecebimento',
+        'mesesReservaAlvo', 'percentualMaxComprometido', 'alertaOrcamentoPct', 'diasAlertaVencimento',
+      ]
+      for (const chave of operacionais) {
+        await db.configuracoes.where('chave').equals(chave).delete()
+      }
     })
-    mostrar('Dados apagados com sucesso', 'success')
+
+    mostrar('Dados operacionais apagados. Categorias e contas preservadas.', 'success')
     setConfirmDelete('')
     window.location.reload()
   }
@@ -309,7 +320,7 @@ export function ConfigPage() {
         <div>
           <SectionHeader id="aparencia" icon={tema === 'dark' ? Moon : Sun} label="Aparência" />
           {activeSection === 'aparencia' && (
-            <div className="mt-2">
+            <div className="mt-2 flex flex-col gap-2">
               <button
                 onClick={() => void toggleTema()}
                 className="flex items-center justify-between w-full px-4 py-3.5 rounded-xl bg-[var(--bg3)] border border-[var(--border)] text-[var(--text)]"
@@ -320,6 +331,35 @@ export function ConfigPage() {
                 </div>
                 <span className="text-xs text-[var(--text3)]">Toque para alternar</span>
               </button>
+
+              {/* Cor secundária (accent) */}
+              <div className="px-4 py-3.5 rounded-xl bg-[var(--bg3)] border border-[var(--border)]">
+                <div className="flex items-center gap-2 mb-3">
+                  <Palette size={16} className="text-[var(--blue)]" />
+                  <p className="text-sm font-medium text-[var(--text)]">Cor de destaque</p>
+                </div>
+                <div className="flex gap-3">
+                  {(Object.entries(ACCENT_CORES) as [AccentKey, typeof ACCENT_CORES[AccentKey]][]).map(([key, info]) => (
+                    <button
+                      key={key}
+                      onClick={() => void setAccent(key)}
+                      className="flex flex-col items-center gap-1.5"
+                    >
+                      <div
+                        className="w-9 h-9 rounded-full border-2 transition-all flex items-center justify-center"
+                        style={{
+                          background: tema === 'dark' ? info.dark : info.light,
+                          borderColor: accent === key ? 'var(--text)' : 'transparent',
+                          boxShadow: accent === key ? `0 0 0 2px var(--bg3), 0 0 0 4px ${tema === 'dark' ? info.dark : info.light}` : 'none',
+                        }}
+                      >
+                        {accent === key && <Check size={14} className="text-white" />}
+                      </div>
+                      <p className="text-[9px] text-[var(--text3)]">{info.nome}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </div>

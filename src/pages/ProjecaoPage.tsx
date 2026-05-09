@@ -75,7 +75,7 @@ function TooltipCustom({ active, payload, label }: {
 
 // ─── Página Principal ─────────────────────────────────────────────────────────
 
-export function ProjecaoPage() {
+export function ProjecaoPage({ embedded = false }: { embedded?: boolean }) {
   const projecao = useProjection()
   const [dataSim, setDataSim] = useState('')
   const [mostrarTodosEventos, setMostrarTodosEventos] = useState(false)
@@ -108,8 +108,8 @@ export function ProjecaoPage() {
   if (!projecao) {
     return (
       <div className="flex flex-col flex-1">
-        <Header titulo="Projeção" />
-        <div className="flex items-center justify-center flex-1">
+        {!embedded && <Header titulo="Projeção Financeira" />}
+        <div className="flex items-center justify-center flex-1 py-16">
           <p className="text-sm text-[var(--text3)]">Calculando projeção...</p>
         </div>
       </div>
@@ -130,7 +130,7 @@ export function ProjecaoPage() {
 
   return (
     <div className="flex flex-col flex-1 pb-24">
-      <Header titulo="Projeção Financeira" />
+      {!embedded && <Header titulo="Projeção Financeira" />}
 
       {/* Alerta crítico */}
       {temAlerta && (

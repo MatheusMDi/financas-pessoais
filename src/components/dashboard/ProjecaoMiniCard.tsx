@@ -20,7 +20,7 @@ export function ProjecaoMiniCard() {
           <p className="text-xs font-semibold text-[var(--text)] uppercase tracking-widest">Projeção</p>
         </div>
         <Link
-          to="/projecao"
+          to="/dashboards?tab=projecao"
           className="flex items-center gap-0.5 text-[10px] text-[var(--blue)]"
         >
           Ver detalhes <ChevronRight size={11} />

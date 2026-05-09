@@ -3,12 +3,18 @@ import { ThemeToggle } from '../ui/ThemeToggle'
 interface HeaderProps {
   titulo: string
   acao?: React.ReactNode
+  subtitulo?: string
 }
 
-export function Header({ titulo, acao }: HeaderProps) {
+export function Header({ titulo, acao, subtitulo }: HeaderProps) {
   return (
-    <header className="flex items-center justify-between px-4 pt-4 pb-2">
-      <h1 className="text-lg font-semibold text-[var(--text)]">{titulo}</h1>
+    <header className="flex items-center justify-between px-4 pt-4 pb-3">
+      <div>
+        <h1 className="text-lg font-bold text-[var(--text)] tracking-tight">{titulo}</h1>
+        {subtitulo && (
+          <p className="text-[11px] text-[var(--text3)] mt-0.5">{subtitulo}</p>
+        )}
+      </div>
       <div className="flex items-center gap-2">
         {acao}
         <ThemeToggle />
