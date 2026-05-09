@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a24;
+  --border: rgba(255, 255, 255, 0.07);
+  --border2: rgba(255, 255, 255, 0.13);
+  --text: #f0f0f8;
+  --text2: #8888aa;
+  --text3: #55556a;
+  --green: #00e5a0;
+  --red: #ff4d6a;
+  --yellow: #ffd166;
+  --blue: #4d9fff;
+  --purple: #b088ff;
+}
+
+:root.dark {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a24;
+  --border: rgba(255, 255, 255, 0.07);
+  --border2: rgba(255, 255, 255, 0.13);
+  --text: #f0f0f8;
+  --text2: #8888aa;
+  --text3: #55556a;
+  --green: #00e5a0;
+  --red: #ff4d6a;
+  --yellow: #ffd166;
+  --blue: #4d9fff;
+  --purple: #b088ff;
+}
+
+:root:not(.dark) {
+  --bg: #f8f8fc;
+  --bg2: #ffffff;
+  --bg3: #f0f0f8;
+  --border: rgba(0, 0, 0, 0.07);
+  --border2: rgba(0, 0, 0, 0.13);
+  --text: #0a0a0f;
+  --text2: #55556a;
+  --text3: #8888aa;
+  --green: #00916a;
+  --red: #cc2244;
+  --yellow: #b07800;
+  --blue: #1a5fa8;
+  --purple: #6a3db8;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border2);
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 2px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
