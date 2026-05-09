@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="pt-BR" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MD Finanças</title>
+    <script>
+      // Redireciona para a raiz do app preservando a hash
+      var path = window.location.pathname.replace('/financas-pessoais', '') || '/'
+      var hash = window.location.hash
+      window.location.replace('/financas-pessoais/' + hash)
+    </script>
+  </head>
+  <body></body>
+</html>
