@@ -237,7 +237,7 @@ export function ConfigPage() {
                       <input value={contaEditSaldo} onChange={e => setContaEditSaldo(e.target.value)} type="number" placeholder="Saldo inicial" className="w-full bg-[var(--bg)] border border-[var(--border2)] rounded-lg px-3 py-2 text-sm text-[var(--text)] outline-none focus:border-[var(--blue)]" />
                       <div className="flex gap-2">
                         <button onClick={() => setContaEditando(null)} className="flex-1 py-2 rounded-lg border border-[var(--border)] text-sm text-[var(--text3)]">Cancelar</button>
-                        <button onClick={() => void salvarEdicaoConta()} className="flex-1 py-2 rounded-lg bg-[var(--blue)] text-white text-sm font-semibold">Salvar</button>
+                        <button onClick={() => void salvarEdicaoConta()} className="flex-1 py-2 rounded-lg bg-[var(--blue)] text-[var(--on-accent)] text-sm font-semibold">Salvar</button>
                       </div>
                     </div>
                   ) : contaDeletando === conta.id ? (
@@ -299,7 +299,7 @@ export function ConfigPage() {
                   </select>
                   <div className="flex gap-2">
                     <button onClick={() => { setNovaConta(false); setNovaContaNome('') }} className="flex-1 py-2 rounded-lg border border-[var(--border)] text-sm text-[var(--text3)]">Cancelar</button>
-                    <button onClick={() => void handleAdicionarConta()} className="flex-1 py-2 rounded-lg bg-[var(--blue)] text-white text-sm font-semibold">Adicionar</button>
+                    <button onClick={() => void handleAdicionarConta()} className="flex-1 py-2 rounded-lg bg-[var(--blue)] text-[var(--on-accent)] text-sm font-semibold">Adicionar</button>
                   </div>
                 </div>
               ) : (
@@ -326,7 +326,7 @@ export function ConfigPage() {
                       </div>
                       <div className="flex gap-2">
                         <button onClick={() => setCatEditando(null)} className="flex-1 py-1.5 rounded-lg border border-[var(--border)] text-xs text-[var(--text3)]">Cancelar</button>
-                        <button onClick={() => void salvarEdicaoCategoria()} className="flex-1 py-1.5 rounded-lg bg-[var(--blue)] text-white text-xs font-semibold">Salvar</button>
+                        <button onClick={() => void salvarEdicaoCategoria()} className="flex-1 py-1.5 rounded-lg bg-[var(--blue)] text-[var(--on-accent)] text-xs font-semibold">Salvar</button>
                       </div>
                     </div>
                   ) : catDeletando === cat.id ? (
@@ -564,7 +564,7 @@ function ConfigField({
           onKeyDown={e => e.key === 'Enter' && void save()}
           className="flex-1 bg-[var(--bg)] border border-[var(--border2)] rounded-lg px-3 py-2 text-sm text-[var(--text)] outline-none focus:border-[var(--blue)]"
         />
-        <button onClick={() => void save()} className="p-2 rounded-lg bg-[var(--blue)] text-white">
+        <button onClick={() => void save()} className="p-2 rounded-lg bg-[var(--blue)] text-[var(--on-accent)]">
           <Check size={14} />
         </button>
       </div>
@@ -593,7 +593,7 @@ function OrcamentoRow({ nome, icone, valor, cor, onSave }: {
       {editing ? (
         <div className="flex items-center gap-1">
           <input type="number" value={local} onChange={e => setLocal(e.target.value)} onKeyDown={e => e.key === 'Enter' && void save()} autoFocus placeholder="0" className="w-24 bg-[var(--bg)] border border-[var(--border2)] rounded-lg px-2 py-1 text-sm text-[var(--text)] outline-none text-right" />
-          <button onClick={() => void save()} className="p-1 rounded-lg bg-[var(--blue)] text-white"><Check size={12} /></button>
+          <button onClick={() => void save()} className="p-1 rounded-lg bg-[var(--blue)] text-[var(--on-accent)]"><Check size={12} /></button>
         </div>
       ) : (
         <button onClick={() => { setLocal(String(valor || '')); setEditing(true) }} className="text-sm font-mono text-[var(--text2)]">

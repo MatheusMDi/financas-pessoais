@@ -70,7 +70,7 @@ export function ReservaEmergenciaCard() {
           <button
             onClick={() => void handleAporte()}
             disabled={salvando}
-            className="px-3 py-2 rounded-lg bg-[var(--blue)] text-white text-sm font-semibold shrink-0 disabled:opacity-60"
+            className="px-3 py-2 rounded-lg bg-[var(--blue)] text-[var(--on-accent)] text-sm font-semibold shrink-0 disabled:opacity-60"
           >
             OK
           </button>

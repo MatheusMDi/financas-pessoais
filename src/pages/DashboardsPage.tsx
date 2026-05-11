@@ -6,6 +6,11 @@ import { ProjecaoPage } from './ProjecaoPage'
 
 type Tab = 'atual' | 'projecao'
 
+const TABS: { id: Tab; label: string }[] = [
+  { id: 'atual',    label: 'Atual' },
+  { id: 'projecao', label: 'Projeção' },
+]
+
 export function DashboardsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [tab, setTab] = useState<Tab>(() => {
@@ -28,20 +33,27 @@ export function DashboardsPage() {
     <div className="flex flex-col flex-1 pb-20">
       <Header titulo="Dashboards" />
 
-      {/* Segmented control */}
-      <div className="px-4 mb-3">
-        <div className="flex bg-[var(--bg3)] border border-[var(--border)] rounded-xl p-1 gap-1">
-          {(['atual', 'projecao'] as Tab[]).map(t => (
+      {/* Tab bar — Binance underline style */}
+      <div className="px-4 mb-1">
+        <div className="flex border-b border-[var(--border)]">
+          {TABS.map(t => (
             <button
-              key={t}
-              onClick={() => changeTab(t)}
-              className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-all ${
-                tab === t
-                  ? 'bg-[var(--blue)] text-white shadow-sm'
-                  : 'text-[var(--text3)] hover:text-[var(--text2)]'
-              }`}
+              key={t.id}
+              onClick={() => changeTab(t.id)}
+              className="relative flex-1 py-2.5 text-sm font-semibold transition-colors"
+              style={{ color: tab === t.id ? 'var(--blue)' : 'var(--text3)' }}
             >
-              {t === 'atual' ? 'Atual' : 'Projeção'}
+              {t.label}
+              {/* Active underline */}
+              <span
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-t-full transition-all"
+                style={{
+                  width: tab === t.id ? '60%' : 0,
+                  height: 2,
+                  background: 'var(--blue)',
+                  opacity: tab === t.id ? 1 : 0,
+                }}
+              />
             </button>
           ))}
         </div>

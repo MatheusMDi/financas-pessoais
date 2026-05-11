@@ -94,13 +94,13 @@ export function ImportModal({ onFechar, onSucesso }: ImportModalProps) {
           <div className="flex gap-2">
             <button
               onClick={() => { setAba('json'); setPreview(null); setCsvPreview(null); setErro('') }}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${aba === 'json' ? 'bg-[var(--blue)] text-white' : 'bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)]'}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${aba === 'json' ? 'bg-[var(--blue)] text-[var(--on-accent)]' : 'bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)]'}`}
             >
               <FileJson size={15} /> JSON
             </button>
             <button
               onClick={() => { setAba('csv'); setPreview(null); setCsvPreview(null); setErro('') }}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${aba === 'csv' ? 'bg-[var(--blue)] text-white' : 'bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)]'}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${aba === 'csv' ? 'bg-[var(--blue)] text-[var(--on-accent)]' : 'bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)]'}`}
             >
               <FileText size={15} /> CSV (Dívidas)
             </button>

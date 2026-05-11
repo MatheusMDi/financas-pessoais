@@ -10,7 +10,7 @@ export function Chip({ label, ativo = false, onClick }: ChipProps) {
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
         ativo
-          ? 'bg-[var(--blue)] text-white'
+          ? 'bg-[var(--blue)] text-[var(--on-accent)]'
           : 'bg-[var(--bg3)] text-[var(--text2)] border border-[var(--border)]'
       }`}
     >

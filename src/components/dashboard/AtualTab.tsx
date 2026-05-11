@@ -121,7 +121,7 @@ function PeriodSelector({
             key={t}
             onClick={() => onTipo(t)}
             className={`flex-1 py-1.5 rounded-lg text-[10px] font-semibold transition-all whitespace-nowrap ${
-              tipo === t ? 'bg-[var(--blue)] text-white' : 'text-[var(--text3)]'
+              tipo === t ? 'bg-[var(--blue)] text-[var(--on-accent)]' : 'text-[var(--text3)]'
             }`}
           >
             {t === 'mes' ? 'Este mês' : t === '30dias' ? 'Últimos 30d' : 'Custom'}
@@ -490,7 +490,7 @@ export function AtualTab() {
               key={f}
               onClick={() => handleFiltroChange(() => setTabFiltro(f))}
               className={`px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all ${
-                tabFiltro === f ? 'bg-[var(--blue)] text-white' : 'bg-[var(--bg3)] border border-[var(--border)] text-[var(--text3)]'
+                tabFiltro === f ? 'bg-[var(--blue)] text-[var(--on-accent)]' : 'bg-[var(--bg3)] border border-[var(--border)] text-[var(--text3)]'
               }`}
             >
               {f === 'todos' ? 'Todos' : f === 'receitas' ? 'Receitas' : 'Despesas'}

@@ -90,7 +90,7 @@ export function SimuladorCompra({ margemAtual }: SimuladorCompraProps) {
             <button
               key={n}
               onClick={() => setParcelas(n)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${parcelas === n ? 'bg-[var(--blue)] text-white' : 'bg-[var(--bg)] border border-[var(--border)] text-[var(--text2)]'}`}
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${parcelas === n ? 'bg-[var(--blue)] text-[var(--on-accent)]' : 'bg-[var(--bg)] border border-[var(--border)] text-[var(--text2)]'}`}
             >
               {n}×
             </button>

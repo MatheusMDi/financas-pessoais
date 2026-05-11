@@ -3,14 +3,14 @@ import { db } from '../db/database'
 
 type Tema = 'dark' | 'light'
 
-export type AccentKey = 'blue' | 'green' | 'purple' | 'orange' | 'red'
+export type AccentKey = 'yellow' | 'blue' | 'green' | 'purple' | 'orange'
 
-export const ACCENT_CORES: Record<AccentKey, { nome: string; dark: string; light: string }> = {
-  blue:   { nome: 'Azul',    dark: '#4d9fff', light: '#1a5fa8' },
-  green:  { nome: 'Verde',   dark: '#00e5a0', light: '#00916a' },
-  purple: { nome: 'Roxo',    dark: '#b088ff', light: '#6a3db8' },
-  orange: { nome: 'Laranja', dark: '#ff9f4d', light: '#c06020' },
-  red:    { nome: 'Vermelho',dark: '#ff4d6a', light: '#cc2244' },
+export const ACCENT_CORES: Record<AccentKey, { nome: string; dark: string; light: string; onAccent: string }> = {
+  yellow: { nome: 'Ouro',    dark: '#fcd535', light: '#b8860b', onAccent: '#181a20' },
+  blue:   { nome: 'Azul',    dark: '#4d9fff', light: '#1a5fa8', onAccent: '#ffffff' },
+  green:  { nome: 'Verde',   dark: '#0ecb81', light: '#0a9a62', onAccent: '#181a20' },
+  purple: { nome: 'Roxo',    dark: '#b088ff', light: '#6a3db8', onAccent: '#ffffff' },
+  orange: { nome: 'Laranja', dark: '#f0a500', light: '#c06020', onAccent: '#181a20' },
 }
 
 interface ThemeState {
@@ -24,7 +24,7 @@ interface ThemeState {
 
 export const useThemeStore = create<ThemeState>((set, get) => ({
   tema: 'dark',
-  accent: 'blue',
+  accent: 'yellow',
 
   carregarTema: async () => {
     const [temaRow, accentRow] = await Promise.all([
@@ -32,7 +32,7 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
       db.configuracoes.where('chave').equals('corSecundaria').first(),
     ])
     const tema = (temaRow?.valor as Tema) ?? 'dark'
-    const accent = (accentRow?.valor as AccentKey) ?? 'blue'
+    const accent = (accentRow?.valor as AccentKey) ?? 'yellow'
     set({ tema, accent })
     aplicarTema(tema)
     aplicarAccent(accent, tema)
@@ -73,6 +73,8 @@ function aplicarTema(tema: Tema): void {
 }
 
 function aplicarAccent(key: AccentKey, tema: Tema): void {
-  const cor = tema === 'dark' ? ACCENT_CORES[key].dark : ACCENT_CORES[key].light
+  const info = ACCENT_CORES[key]
+  const cor = tema === 'dark' ? info.dark : info.light
   document.documentElement.style.setProperty('--blue', cor)
+  document.documentElement.style.setProperty('--on-accent', info.onAccent)
 }

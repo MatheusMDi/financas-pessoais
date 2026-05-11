@@ -216,7 +216,7 @@ export function ProjecaoPage({ embedded = false }: { embedded?: boolean }) {
             onClick={() => setTabGrafico(tab)}
             className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
               tabGrafico === tab
-                ? 'bg-[var(--blue)] text-white'
+                ? 'bg-[var(--blue)] text-[var(--on-accent)]'
                 : 'bg-[var(--bg3)] border border-[var(--border)] text-[var(--text2)]'
             }`}
           >
